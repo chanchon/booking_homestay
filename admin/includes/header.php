@@ -7,8 +7,9 @@
 
    </button>
    <ul class="navbar-nav px-3">
-     <li class="nav-item text-nowrap">
-       <a  class="nav-link" href="../logout.php"><i class="fa-solid fa-arrow-right-from-bracket "></i> ออกจากระบบ</a>
+     
+     <li class="nav-item-1 text-nowrap">
+       <a  class="nav-link-1" href="../logout.php"><i class="fa-solid fa-arrow-right-from-bracket "></i> ออกจากระบบ</a>
      </li>
    </ul>
  </header>

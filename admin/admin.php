@@ -71,114 +71,154 @@ $query = mysqli_query($condb, $sql);
             <?php
             if ($_SESSION["a_level"] == "system") {
             ?>
-              <!-- เพิ่มข้อมูล -->
+              <!-- เพิ่ม admin -->
               <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_data">เพิ่มผู้ใช้ <i class="fas fa-user-plus"></i></button>
-            <?php
-            } else {
-            ?>
-              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_data">เพิ่มผู้ใช้ <i class="fas fa-user-plus"></i></button>
-            <?php
-            }
-            ?>
 
 
 
-            <!-- เพิ่มข้อมูล -->
-
-            <div class="modal fade" id="add_data" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <form class="modal-content" method="post" action="admin_add_data.php">
-                  <div class="modal-header">
-                    <h5 class="modal-title">เพิ่มข้อมูลผู้ใช้ </h5>
-                  </div>
-                  <div class="modal-body">
-                    <div class="mb-3">
-                      <label class="form-label">ชื่อผู้ใช้</label>
-                      <input type="text" class="form-control" name="a_username">
+              <div class="modal fade" id="add_data" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <form class="modal-content" enctype="multipart/form-data" method="post" action="admin_add_data.php">
+                    <div class="modal-header">
+                      <h5 class="modal-title">เพิ่มข้อมูลแอดมิน</h5>
                     </div>
-                    <div class="mb-3">
-                      <label class="form-label">รหัสผ่าน</label>
-                      <input type="password" class="form-control" name="a_password">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label">ชื่อ</label>
-                      <input type="text" class="form-control" name="a_name">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label">นามสกุล</label>
-                      <input type="text" class="form-control" name="a_surname">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label">เพศ</label>
-                      <select class="form-select" name="a_sex">
-                        <option value="ชาย">ชาย</option>
-                        <option value="หญิง">หญิง</option>
-                      </select>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label">เบอร์โทรศัพท์</label>
-                      <input type="text" class="form-control phone_th" name="a_phone">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label">ที่พัก</label>
-                      <?php
-                      if ($_SESSION["a_level"] == "system") {
-                      ?>
-                        <input type="text" class="form-control" name="a_home">
-
-                      <?php
-                      } elseif ($_SESSION["a_level"] == "admin") {
-                      ?>
-                        <input type="text" value="<?php echo $_SESSION["a_home"]; ?>" class="form-control" disabled>
-                        <input type="hidden" value="<?php echo $_SESSION["a_home"]; ?>" class="form-control" name="a_home">
-
-                      <?php
-                      }
-                      ?>
-                    </div>
-                    <?php
-                    if ($_SESSION["a_level"] == "system") {
-                    ?>
-                    <div class="mb-3">
-                      <label class="form-label">line Token</label>
-                      <input type="text" class="form-control " name="line_group">
-                    </div>
+                    <div class="modal-body">
                       <div class="mb-3">
-                        <label class="form-label">กลุ่มไลน์</label>
-                        <input type="file" class="form-control" name="file" id="file"> 
+                        <label class="form-label">ชื่อผู้ใช้</label>
+                        <input type="text" class="form-control" name="a_username" required>
                       </div>
-                    <?php
-                    }
-                    ?>
-                    <div>
-                      <label class="form-label">ระดับผู้ใช้</label>
-                      <select class="form-control" name="a_level">
+                      <div class="mb-3">
+                        <label class="form-label">รหัสผ่าน</label>
+                        <input type="password" class="form-control" name="a_password" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">ชื่อ</label>
+                        <input type="text" class="form-control" name="a_name" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">นามสกุล</label>
+                        <input type="text" class="form-control" name="a_surname" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">เพศ</label>
+                        <select class="form-select" name="a_sex" required>
+                          <option value="ชาย">ชาย</option>
+                          <option value="หญิง">หญิง</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">เบอร์โทรศัพท์</label>
+                        <input type="text" class="form-control phone_th" name="a_phone" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">ที่พัก</label>
                         <?php
                         if ($_SESSION["a_level"] == "system") {
                         ?>
+                          <input type="text" class="form-control" name="a_home">
 
-                          <option value="admin" selected>แอดมิน</option>
                         <?php
-                        } else if ($_SESSION["a_level"] == "admin") {
+                        } elseif ($_SESSION["a_level"] == "admin") {
                         ?>
-                          <option value="member" selected>สมาชิก</option>
+                          <input type="text" value="<?php echo $_SESSION["a_home"]; ?>" class="form-control" disabled>
+                          <input type="hidden" value="<?php echo $_SESSION["a_home"]; ?>" class="form-control" name="a_home">
 
                         <?php
                         }
                         ?>
+                      </div>
 
+                      <div class="mb-3">
+                        <label class="form-label">line Token</label>
+                        <input type="text" class="form-control " name="line_token" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">กลุ่มไลน์</label>
+                        <input type="file" class="form-control" name="upload" id="upload" required>
+                      </div>
 
+                      <div>
+                        <label class="form-label">ระดับผู้ใช้</label>
+                        <select class="form-control" name="a_level">
 
-                      </select>
+                          <option value="admin" selected>แอดมิน</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                    <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
-                  </div>
-                </form>
-              </div>
-            </div>&nbsp;&nbsp;
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                      <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+                    </div>
+                  </form>
+                </div>
+              </div>&nbsp;&nbsp;
+            <?php
+            } else {
+            ?>
+
+              <!-- เพิ่ม member -->
+              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_member">เพิ่มผู้ใช้ <i class="fas fa-user-plus"></i></button>
+
+              <div class="modal fade" id="add_member" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <form class="modal-content" method="post" action="admin_add_member.php">
+                    <div class="modal-header">
+                      <h5 class="modal-title">เพิ่มข้อมูลสมาชิก </h5>
+                    </div>
+                    <div class="modal-body">
+                      <div class="mb-3">
+                        <label class="form-label">ชื่อผู้ใช้</label>
+                        <input type="text" class="form-control" name="a_username" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">รหัสผ่าน</label>
+                        <input type="password" class="form-control" name="a_password" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">ชื่อ</label>
+                        <input type="text" class="form-control" name="a_name" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">นามสกุล</label>
+                        <input type="text" class="form-control" name="a_surname" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">เพศ</label>
+                        <select class="form-select" name="a_sex" required>
+                          <option value="ชาย">ชาย</option>
+                          <option value="หญิง">หญิง</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">เบอร์โทรศัพท์</label>
+                        <input type="text" class="form-control phone_th" name="a_phone" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">ที่พัก</label>
+
+                        <input type="text" value="<?php echo $_SESSION["a_home"]; ?>" class="form-control" disabled>
+                        <input type="hidden" value="<?php echo $_SESSION["a_home"]; ?>" class="form-control" name="a_home">
+
+                      </div>
+                      <div>
+                        <label class="form-label">ระดับผู้ใช้</label>
+                        <select class="form-control" name="a_level">
+
+                          <option value="member" selected>สมาชิก</option>
+
+                        </select>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                      <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+                    </div>
+                  </form>
+                </div>
+              </div>&nbsp;&nbsp;
+            <?php
+            }
+            ?>
 
           </div>
         </div>
@@ -237,38 +277,41 @@ $query = mysqli_query($condb, $sql);
                 <td class="td"><?php echo $result['a_sex']; ?></td>
                 <td class="td"><?php echo $result['a_phone']; ?></td>
                 <td class="td"><?php echo $result['a_home']; ?></td>
+
                 <td class="td" align="center">
-
-
-                  <!--ปุ่ม qr code -->
                   <?php if ($result['a_level'] == "admin") {
                   ?>
 
-                    <a type="button" data-bs-toggle="modal" data-bs-target="#qr_code"><i class="fab fa-line fa-2x"></i></a>
-                  <?php
-                  }
-                  ?>
-                  <div class="modal fade" id="qr_code" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <div class="modal-header ">
-                          <h5 class="modal-title">แสกน QR Code เพื่อเข้ากลุ่มไลน์</h5>
-                        </div>
-                        <div class="modal-body">
-                          <div class="mb-3">
-                            <img src="images/qrcode.png" width="180x180" alt="">
-                          </div>
-                        
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
-                        </div>
+
+                    <!--ปุ่ม qr code -->
+
+
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#qr_code<?php echo $result['a_id']; ?>"><i class="fab fa-line fa-2x"></i></a>
+
+
+
+
+                </td> <?php
+                    }
+                      ?>
+
+              <div class="modal fade" id="qr_code<?php echo $result['a_id']; ?>" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header ">
+                      <h5 class="modal-title">แสกน QR Code เพื่อเข้ากลุ่มไลน์</h5>
+                    </div>
+                    <div class="modal-body">
+                      <div class="mb-3" align="center">
+                        <img src="<?php echo  $result['image']; ?>" width="200x200" alt="">
+                      </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
                       </div>
                     </div>
                   </div>
-
-
-
-                </td>
+                </div>
                 <td class="td text-center"><?php if ($result['a_level'] == "member") {
                                               echo "สมาชิก";
                                             } else if ($result['a_level'] == "admin") {

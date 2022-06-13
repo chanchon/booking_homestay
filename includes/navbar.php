@@ -26,14 +26,13 @@
                 <ul class="dropdown-menu dropdown-menu-lg-end">
                   <li><button class="dropdown-item" type="button" onclick="window.location.href='profile.php'"><i class="fa-solid fa-address-card"></i> ข้อมูลส่วนตัว</button></li>
                   <?php
-                  if ($_SESSION["a_level"] == "admin") {
+                  if ($_SESSION["a_level"] == "admin"  ) {
                   ?>
                   
                     <li><button class="dropdown-item" type="button" onclick="window.location.href='admin/index.php'"><i class="fas fa-cog"></i> ระบบหลังบ้าน</button></li>
                   <?php
                   }
                   ?>
-                  
                   <hr>
                   <li><button class="dropdown-item" type="button" onclick="window.location.href='logout.php'"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</button></li>
                   

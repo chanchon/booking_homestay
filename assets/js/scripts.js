@@ -19,8 +19,6 @@ if (window.history.replaceState) {
 
 
 //ล็อกเบอร์์โทร
-$(document).ready(function () {
+$(document).ready(function() {
     $('#phone_th').mask('000-0000000');
 });
-
-

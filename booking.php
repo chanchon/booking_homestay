@@ -31,12 +31,10 @@ if (isset($_POST) && !empty($_POST)) {
     $home = $_POST['home'];
     $checkin = $_POST['checkin'];
     $checkout = $_POST['checkout'];
+    $package = $_POST['package'];
+    $total = $_POST['total'];
 
 
-    $package = implode(",", $_POST['package']);
-    if ($package != '-') {
-        $package = substr($package, 2);
-    }
 
     //เช็คจำนวนคนที่เข้าพัก
     $sql3 = "SELECT SUM(`guest`)AS sumguest FROM `tb_booking` WHERE `home` LIKE '$home' ORDER BY `b_id` ASC";
@@ -44,41 +42,41 @@ if (isset($_POST) && !empty($_POST)) {
     $row = mysqli_fetch_array($result3);
     if ($row['sumguest'] == 50) {
         echo '<script type="text/javascript">';
-        echo "setTimeout(function () { swal('ไม่สามารถจองที่พักได้ !!','เนื่องจากมีผู้จองครบแล้ว');";
+        echo "setTimeout(function () { swal('ไม่สามารถจองที่พักได้ !!','เนื่องจากมีผู้จองครบแล้ว','warning');";
         echo '}, 1000);</script>';
     } else {
         $count = 50 - $row['sumguest'];
 
         if ($count >= $guest) {
-            $sql = "INSERT INTO tb_booking (name, phone, guest, home, checkin, checkout, package) 
-           VALUES('$name', '$phone', '$guest', '$home', '$checkin', '$checkout', '$package')";
+            $sql = "INSERT INTO tb_booking (name, phone, guest, home, checkin, checkout, package, total) 
+           VALUES('$name', '$phone', '$guest', '$home', '$checkin', '$checkout', '$package', '$total')";
             $result = mysqli_query($condb, $sql);
 
 
             if ($result) {
-                $sql6 = "SELECT line_group FROM `tb_admin` WHERE `a_home` = '$home' AND `a_level` = 'admin'";
+                $sql6 = "SELECT line_token FROM `tb_admin` WHERE `a_home` = '$home' AND `a_level` = 'admin'";
                 $result6 = mysqli_query($condb, $sql6);
                 $Tk = mysqli_fetch_array($result6);
                 $message = "\n มีลูกค้าเข้า เบอร์ \n"  . $phone;
-                $LINE_TOKEN = $Tk['line_group'];
+                $LINE_TOKEN = $Tk['line_token'];
                 sendlinemesg($message, $LINE_TOKEN);
- 
 
                 echo '<script type="text/javascript">';
                 echo "setTimeout(function () { swal('ทำการจองเรียบร้อยแล้ว', 'เราจะติดต่อกลับในเร็วๆ นี้', 'success',);";
                 echo '}, 1000);</script>';
             } else {
                 echo '<script type="text/javascript">';
-                echo "setTimeout(function () { swal('เกิดข้อผิดพลาด');";
+                echo "setTimeout(function () { swal('เกิดข้อผิดพลาด ,'', 'error,');";
                 echo '}, 1000);</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-            echo "setTimeout(function () { swal('สามารถจองได้เพียง " . $count . "ท่าน');";
+            echo "setTimeout(function () { swal('สามารถจองได้เพียง " . $count . "ท่าน' ,'','warning');";
             echo '}, 1000);</script>';
         }
     }
 }
+
 
 
 
@@ -115,6 +113,7 @@ if (isset($_POST) && !empty($_POST)) {
 </head>
 
 <body>
+
     <div class="limiter">
         <div class="container-login100" style="background-image: url('images/bg-01.jpg');">
             <div class="container-1">
@@ -132,7 +131,11 @@ if (isset($_POST) && !empty($_POST)) {
                             </div>
                             <div class="input-box">
                                 <span class="details">จำนวนผู้เข้าพัก</span>
-                                <input type="number" name="guest" min="1" max="30" required>
+                                <input type="number" id="guest" name="guest" min="1" max="30" required>
+                                <?php
+
+
+                                ?>
                             </div>
                             <div class="input-box">
                                 <span class="details">พักที่</span>
@@ -164,26 +167,28 @@ if (isset($_POST) && !empty($_POST)) {
                                 <span class="details">เช็คเอาท์</span>
                                 <input type="text" class="datepicker" name="checkout" placeholder="เลือกวันที่" required>
                             </div>
-                        </div>
-                        <div class="package-details">
-                            <span class="package-title">แพ็กเกจ</span>
-                            <input type="hidden" name="package[]" value="-" checked>
-                            <input type="checkbox" name="package[]" id="dot-1" value="อาหาร 3 มื้อ">
-                            <input type="checkbox" name="package[]" id="dot-2" value="นำเที่ยว">
-                            <input type="checkbox" name="package[]" id="dot-3" value="ทำกิจกรรม">
-                            <div class="category">
-                                <label for="dot-1">
-                                    <span class="dot one"></span>
-                                    <span class="package">อาหาร 3 มื้อ</span>
-                                </label>
-                                <label for="dot-2">
-                                    <span class="dot two"></span>
-                                    <span class="package">นำเที่ยว</span>
-                                </label>
-                                <label for="dot-3">
-                                    <span class="dot three"></span>
-                                    <span class="package">ทำกิจกรรม</span>
-                                </label>
+
+                            <div class="input-box">
+                                <span class="details">แพ็กเกจ</span>
+                                <select name="package" id="package" onchange="package(this.value)" required>
+
+                                    <option value="">เลือกแพ็กเกจ</option>
+                                    <?php
+                                    $sql4 = "SELECT * FROM `tb_package`";
+                                    $result4 = mysqli_query($condb, $sql4);
+
+
+                                    while ($row4 = mysqli_fetch_array($result4)) {
+                                        echo '<option  value="' . $row4['package_price'] . '"> ' . $row4['package_name'] . ' &nbsp&nbsp&nbsp&nbsp' . $row4['package_price'] . '' . "฿ ต่อคน" . '</option>';
+                                    }
+
+                                    ?>
+
+                                </select>
+                            </div>
+                            <div class="input-box">
+                                <span class="details">ราคารวม</span>
+                                <input type="text" id="total" name="total" readonly>
                             </div>
                         </div>
                         <div class="button">
@@ -205,8 +210,34 @@ if (isset($_POST) && !empty($_POST)) {
 
 
 
+
     <!-- sweet alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#guest').on('change', function() {
+                $('#total').val(valueFUnction());
+            });
+            $('#package').on('change', function() {
+                $('#total').val(valueFUnction());
+            });
+        });
+
+        function valueFUnction(quan) {
+            var $selection = $('#package').find(':selected');
+            var quantity = $('#total').val();
+            var total = 0;
+            $selection.each(function() {
+                total += $(this).data('price') * quantity;
+            })
+            return total;
+        }
+    </script>
+
+
+
+
 
 
 

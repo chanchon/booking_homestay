@@ -1,10 +1,9 @@
+
 <!-- font awesome -->
-<link rel="stylesheet" href="<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" /> 
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" /> 
 
 
-
-
-<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+<nav  id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
   <div class="position-sticky pt-3">
     <ul class="nav flex-column">
     <?php
@@ -23,6 +22,8 @@
           <h6><i class="fas fa-book-open"></i> รายงานการจอง</h6>
         </a>
       </li>
+
+      
       
 
       <li class="nav-item">
@@ -35,7 +36,7 @@
    
 
     <?php
-    if ($_SESSION["a_level"] != "member") {
+    if ($_SESSION["a_level"] != "member" && $_SESSION["a_level"] != "system" ) {
     ?>
       <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
         <span>โปรไฟล์</span>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <select id="price_input">
+  <option value="Coffee" data-price="3.00">Coffee</option>
+  <option value="Chips" data-price="0.75">Chips</option>
+  <option value="Soda" data-price="2.50">Soda</option>
+</select>
+    <select id="quantity_input">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+</select>
+    <div>Option Price
+        <input type="text" id="opt_price" />
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    $(document).ready(function() {
+        $('#price_input').on('change', function() {
+            $('#opt_price').val(valueFUnction());
+        });
+        $('#quantity_input').on('change', function() {
+            $('#opt_price').val(valueFUnction());
+        });
+    });
+
+    function valueFUnction(quan) {
+        var $selection = $('#price_input').find(':selected');
+        var quantity = $('#quantity_input').val();
+        var total = 0;
+        $selection.each(function() {
+            total += $(this).data('price') * quantity;
+        })
+        return total;
+    }
+</script>

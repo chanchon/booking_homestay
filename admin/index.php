@@ -2,6 +2,7 @@
 require_once('../connection/connect.php');
 include('../includes/date.php');
 
+
 if ($_SESSION == NULL) {
   header("location:../login.php");
   exit();
@@ -58,10 +59,13 @@ $query = mysqli_query($condb, $sql);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/dashboard.css">
+
+
+
   <link rel="icon" type="image/png" sizes="50x50" href="../images/icon.png">
 
   <!-- font awesome -->
-  <link rel="stylesheet" href="<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" /> 
+  <link rel="stylesheet" href="<link rel=" stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
 
   <!--link datatables-->
@@ -83,19 +87,46 @@ $query = mysqli_query($condb, $sql);
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">ข้อมูลการจอง</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
+           
+          <!-- เพิ่ม package -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_package">เพิ่มแพ็กเกจ <i class="fas fa-luggage-cart"></i></button>
 
+
+            <div class="modal fade" id="add_package" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <form class="modal-content" method="post"  action="admin_add_package.php">
+                  <div class="modal-header">
+                    <h5 class="modal-title">เพิ่มแพ็กเกจ</h5>
+                  </div>
+                  <div class="modal-body">
+                    <div class="mb-3 ">
+                    <label class="form-label">แพ็กเกจ</label>
+                        <input type="text" class="form-control " name="package_name" >
+                    </div>
+                    <div class="mb-3 ">
+                    <label class="form-label">ราคา</label>
+                        <input type="text" class="form-control " name="package_price" >
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
         <table class="table table-bordered table-hover table-striped" id="example">
           <!-- table-sm -->
           <thead class="thead">
-            <tr class="table-dark  tr" align="center">
+            <tr class="table-dark  tr">
               <th class="th" scope="col" width="60px">ลำดับที่</th>
 
               <?php
               if ($_SESSION["a_level"] == "admin") {
               ?>
-                <th class="th" scope="col" width="160px">สถานะ</th>
+                <th class="th" scope="col" width="120px">สถานะ</th>
               <?php
               }
               ?>
@@ -107,69 +138,65 @@ $query = mysqli_query($condb, $sql);
               <th class="th" scope="col" width="150px">เช็คเอาท์</th>
               <th class="th" scope="col" width="150px">แพ็กเกจ</th>
               <th class="th" scope="col" width="60px">ห้อง</th>
-              <th class="th" scope="col" width="75px">ตัวเลือก</th>
+              <th class="th" scope="col" width="85px">เพิ่มห้อง</th>
             </tr>
           </thead>
           <tbody class="tbody">
             <?php
             while ($result = mysqli_fetch_array($query)) {
             ?>
-              <tr class="table-light tr" align="center">
-                <th class="th" scope="row"><?php echo $num++; ?></th>
+              <tr class="table-light tr">
+                <th class="th text-center" scope="row"><?php echo $num++; ?></th>
                 <?php
-              if ($_SESSION["a_level"] == "admin") {
-              ?>
-                <td class="td">
-                  <?php
-                  if ($result['status'] == "ยังไม่ชำระ") {
-                    echo "<label class='btn btn-secondary btn-block' >ยังไม่ชำระ</label>";
-                  } else if ($result['status'] == "ชำระแล้ว") {
-                    echo "<label  class='btn btn-success btn-block' >ชำระแล้ว</label>";
-                  }
-                  if ($result['status'] == "ยกเลิก") {
-                    echo "<label class='btn btn-danger btn-block'>ยกเลิก</label>";
-                  }
-                  ?>
-                </td>
-              <?php
-              }
-              ?>
-                
-                <td class="td"><?php echo $result['name']; ?></td>
-                <td class="td"><?php echo $result['phone']; ?></td>
-                <td class="td"><?php echo $result['guest']; ?></td>
-                <td class="td"><?php echo $result['home']; ?></td>
-                <td class="td"><?php echo thai_date($result['checkin']); ?></td>
-                <td class="td"><?php echo thai_date($result['checkout']);  ?></td>
-                <td class="td"><?php echo $result['package']; ?></td>
-                <td class="td"><?php echo $result['room']; ?></td>
-                <td class="td">
-                  <!-- ปุ่มเพิ่มห้อง-->
-                  <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='booking_add_room.php?id=<?php echo $result['b_id']; ?>'"><i class="fa-solid fa-pen-to-square"></i></button>
+                if ($_SESSION["a_level"] == "admin") {
+                ?>
+                  <td class="td">
+                    <?php
+                    if ($result['status'] == "ยังไม่ชำระ") {
+                      echo "<label  class='btn1 btn-unpaid'  >ยังไม่ชำระ</label>";
+                    } else if ($result['status'] == "ชำระแล้ว") {
+                      echo "<label  class='btn1 btn-paid' >ชำระแล้ว</label>";
+                    }
+                    if ($result['status'] == "ยกเลิก") {
+                    ?>
+                      <a type="button" class="btn btn-cancel" data-bs-toggle="modal" data-bs-target="#box<?php echo $result['b_id']; ?>">ยกเลิก</a>
 
-                  <div class="modal fade" id="add_data" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                      <form class="modal-content" method="post" action="booking_add_room.php">
-                        <div class="modal-header">
-                          <h5 class="modal-title">เพิ่มข้อมูลห้องพัก <?php echo 'ID : ' . $result['b_id']; ?></h5>
+                    <?php
+                    }
+                    ?>
+                  </td>
+                  <div class="modal fade" id="box<?php echo $result['b_id']; ?>" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header ">
+                          <h5 class="modal-title">สถานะยกเลิกเนื่องจาก</h5>
                         </div>
                         <div class="modal-body">
-                          <div class="mb-3">
-                            <label class="form-label">ห้อง</label>
-                            <input type="text" class="form-control" name="room" value="<?php echo $result['room']; ?>" />
+                          <h3><?php echo $result['note']; ?></h3>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ย้อนกลับ</button>
                           </div>
                         </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                          <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
-                        </div>
-                      </form>
+                      </div>
                     </div>
-                  </div>
 
+                  <?php
+                }
+                  ?>
 
+                  <td class="td"><?php echo $result['name']; ?></td>
+                  <td class="td"><?php echo $result['phone']; ?></td>
+                  <td class="td text-center"><?php echo $result['guest']; ?></td>
+                  <td class="td"><?php echo $result['home']; ?></td>
+                  <td class="td text-center"><?php echo thai_date($result['checkin']); ?></td>
+                  <td class="td text-center"><?php echo thai_date($result['checkout']);  ?></td>
+                  <td class="td"><?php echo $result['package']; ?></td>
+                  <td class="td text-center"><?php echo $result['room']; ?></td>
+                  <td class="td text-center">
+                    <!-- ปุ่มเพิ่มห้อง-->
+                    <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='booking_add_room.php?id=<?php echo $result['b_id']; ?>'"><i class="fa-solid fa-pen-to-square"></i></button>
 
-                </td>
+                  </td>
               </tr>
             <?php
             }
